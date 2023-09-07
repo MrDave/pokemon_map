@@ -7,7 +7,6 @@ from django.shortcuts import get_object_or_404
 from pokemon_entities.models import Pokemon
 from django.utils.timezone import localtime
 
-
 MOSCOW_CENTER = [55.751244, 37.618423]
 DEFAULT_IMAGE_URL = (
     'https://vignette.wikia.nocookie.net/pokemon/images/6/6e/%21.png/revision'
@@ -69,11 +68,27 @@ def show_pokemon(request, pokemon_id):
             pokemon_entity.lon,
             request.build_absolute_uri(pokemon.image.url)
         )
-    next_evo = {
-        "title_ru": pokemon.next_evo.title,
-        "pokemon_id": pokemon.next_evo.id,
-        "img_url": request.build_absolute_uri(pokemon.next_evo.image.url)
-    }
+
+    if pokemon.previous_evo:
+        previous_evo = {
+            "title_ru": pokemon.previous_evo.title,
+            "pokemon_id": pokemon.previous_evo.id,
+            "img_url": request.build_absolute_uri(pokemon.previous_evo.image.url),
+        }
+    else:
+        previous_evo = {}
+
+    next_pokemon = pokemon.next_evo.first()
+    if next_pokemon:
+        next_evo = {
+            "title_ru": next_pokemon.title,
+            "pokemon_id": next_pokemon.id,
+            "img_url": request.build_absolute_uri(next_pokemon.image.url)
+        }
+    else:
+        next_evo = {}
+
+
     pokemon_dict = {
         'pokemon_id': pokemon.id,
         'img_url': request.build_absolute_uri(pokemon.image.url),
@@ -82,6 +97,7 @@ def show_pokemon(request, pokemon_id):
         'title_jp': pokemon.title_jp,
         'description': pokemon.description,
         'next_evolution': next_evo,
+        'previous_evolution': previous_evo
     }
 
     return render(request, 'pokemon.html', context={
