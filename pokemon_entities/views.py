@@ -69,6 +69,11 @@ def show_pokemon(request, pokemon_id):
             pokemon_entity.lon,
             request.build_absolute_uri(pokemon.image.url)
         )
+    next_evo = {
+        "title_ru": pokemon.next_evo.title,
+        "pokemon_id": pokemon.next_evo.id,
+        "img_url": request.build_absolute_uri(pokemon.next_evo.image.url)
+    }
     pokemon_dict = {
         'pokemon_id': pokemon.id,
         'img_url': request.build_absolute_uri(pokemon.image.url),
@@ -76,6 +81,7 @@ def show_pokemon(request, pokemon_id):
         'title_en': pokemon.title_en,
         'title_jp': pokemon.title_jp,
         'description': pokemon.description,
+        'next_evolution': next_evo,
     }
 
     return render(request, 'pokemon.html', context={
