@@ -10,7 +10,7 @@ class Pokemon(models.Model):
     previous_evo = models.ForeignKey("self", verbose_name="прошлая эволюция", null=True, on_delete=models.SET_NULL, related_name="next_evo")
 
     def __str__(self):
-        return f"{self.title}"
+        return self.title
 
 
 class PokemonEntity(models.Model):
