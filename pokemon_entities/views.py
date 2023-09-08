@@ -69,25 +69,22 @@ def show_pokemon(request, pokemon_id):
             request.build_absolute_uri(pokemon.image.url)
         )
 
+    previous_evo = {}
     if pokemon.previous_evo:
         previous_evo = {
             "title_ru": pokemon.previous_evo.title,
             "pokemon_id": pokemon.previous_evo.id,
             "img_url": request.build_absolute_uri(pokemon.previous_evo.image.url),
         }
-    else:
-        previous_evo = {}
 
     next_pokemon = pokemon.next_evo.first()
+    next_evo = {}
     if next_pokemon:
         next_evo = {
             "title_ru": next_pokemon.title,
             "pokemon_id": next_pokemon.id,
             "img_url": request.build_absolute_uri(next_pokemon.image.url)
         }
-    else:
-        next_evo = {}
-
 
     pokemon_dict = {
         'pokemon_id': pokemon.id,
